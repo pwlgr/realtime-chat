@@ -1,9 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
-	return <div className="App">Chat apsdfgadsdfadsfdsfadsqfjdfasjp fsjkfkhsdf</div>;
+	return <div className="App">Chatf</div>;
 }
 
 export default App;

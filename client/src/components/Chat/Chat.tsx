@@ -4,18 +4,22 @@ import io from 'socket.io-client';
 
 let socket;
 
+const ENDPOINT = 'localhost:5000';
+
 const Chat: React.FC = ({ location }) => {
 	const [ name, setName ] = useState<string>('');
 	const [ room, setRoom ] = useState<string>('');
 
-	useEffect(() => {
-		const { data, name } = queryString.parse(location.search);
+	useEffect(
+		() => {
+			const { data, name } = queryString.parse(location.search);
 
-		socket = io('localhost:5000');
-
-		setName(name);
-		setRoom(room);
-	});
+			socket = io(ENDPOINT);
+			setName(name);
+			setRoom(room);
+		},
+		[ ENDPOINT, location.search ]
+	);
 	return <div>Chat app</div>;
 };
 

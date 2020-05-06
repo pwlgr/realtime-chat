@@ -11,6 +11,9 @@ const io = socketio(server);
 
 io.on('connection', (socket) => {
 	console.log('socket connection');
+
+	socket.on('join', ({ name, room }, callback) => {});
+
 	socket.on('disconnect', () => {
 		console.log('socket disconnected');
 	});

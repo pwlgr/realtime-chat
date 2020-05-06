@@ -12,11 +12,13 @@ const Chat: React.FC = ({ location }) => {
 
 	useEffect(
 		() => {
-			const { data, name } = queryString.parse(location.search);
+			const { room, name } = queryString.parse(location.search);
 
 			socket = io(ENDPOINT);
 			setName(name);
 			setRoom(room);
+
+			socket.emit('join', { name, room }, () => {});
 		},
 		[ ENDPOINT, location.search ]
 	);

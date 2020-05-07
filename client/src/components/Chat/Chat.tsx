@@ -1,18 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
+import './Chat.css';
+import InfoBar from '../InfoBar/InfoBar';
 
 let socket;
 
+interface IProps {
+	hash: string;
+	key: string;
+	pathname: string;
+	search: string;
+	state?: object;
+}
+
 const ENDPOINT = 'localhost:5000';
 
-const Chat: React.FC = ({ location }) => {
-	const [ name, setName ] = useState<string>('');
-	const [ room, setRoom ] = useState<string>('');
-	const [ messages, setMessages ] = useState<string[]>([]);
-	const [ message, setMessage ] = useState<string>('');
+const Chat: React.FC<IProps> = ({ location }) => {
+	const [ name, setName ] = React.useState<string>('');
+	const [ room, setRoom ] = React.useState<string>('');
+	const [ messages, setMessages ] = React.useState<string[]>([]);
+	const [ message, setMessage ] = React.useState<string>('');
 
-	useEffect(
+	React.useEffect(
 		() => {
 			const { room, name } = queryString.parse(location.search);
 
@@ -29,16 +39,35 @@ const Chat: React.FC = ({ location }) => {
 		[ ENDPOINT, location.search ]
 	);
 
-	useEffect(
+	React.useEffect(
 		() => {
-			socket.on('message', (message) => {
+			socket.on('message', (message: string) => {
 				setMessages([ ...messages, message ]);
 			});
 		},
 		[ messages ]
 	);
 
-	return <div>Chat app</div>;
+	const sendMessage = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		e.preventDefault();
+
+		if (message) {
+			socket.emit('sendMessage', message, () => setMessage(''));
+		}
+	};
+
+	return (
+		<div className="outerContainer">
+			<div className="container">
+				<InfoBar room={room} />
+				<input
+					value={message}
+					onChange={(e: React.FormEvent<HTMLInputElement>) => setMessage(e.target.value)}
+					onKeyPress={(e: React.FormEvent<HTMLInputElement>) => (e.key === 'Enter' ? sendMessage(e) : null)}
+				/>
+			</div>
+		</div>
+	);
 };
 
 export default Chat;

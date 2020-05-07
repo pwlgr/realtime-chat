@@ -9,6 +9,8 @@ const ENDPOINT = 'localhost:5000';
 const Chat: React.FC = ({ location }) => {
 	const [ name, setName ] = useState<string>('');
 	const [ room, setRoom ] = useState<string>('');
+	const [ messages, setMessages ] = useState<string[]>([]);
+	const [ message, setMessage ] = useState<string>('');
 
 	useEffect(
 		() => {
@@ -26,6 +28,16 @@ const Chat: React.FC = ({ location }) => {
 		},
 		[ ENDPOINT, location.search ]
 	);
+
+	useEffect(
+		() => {
+			socket.on('message', (message) => {
+				setMessages([ ...messages, message ]);
+			});
+		},
+		[ messages ]
+	);
+
 	return <div>Chat app</div>;
 };
 

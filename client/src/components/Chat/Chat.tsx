@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 import './Chat.css';
@@ -18,12 +18,12 @@ interface IProps {
 const ENDPOINT = 'localhost:5000';
 
 const Chat: React.FC<IProps> = ({ location }) => {
-	const [ name, setName ] = React.useState<string>('');
-	const [ room, setRoom ] = React.useState<string>('');
-	const [ messages, setMessages ] = React.useState<string[]>([]);
-	const [ message, setMessage ] = React.useState<string>('');
+	const [ name, setName ] = useState<string>('');
+	const [ room, setRoom ] = useState<string>('');
+	const [ messages, setMessages ] = useState<string[]>([]);
+	const [ message, setMessage ] = useState<string>('');
 
-	React.useEffect(
+	useEffect(
 		() => {
 			const { room, name } = queryString.parse(location.search);
 
@@ -40,7 +40,7 @@ const Chat: React.FC<IProps> = ({ location }) => {
 		[ ENDPOINT, location.search ]
 	);
 
-	React.useEffect(
+	useEffect(
 		() => {
 			socket.on('message', (message: string) => {
 				setMessages([ ...messages, message ]);
@@ -51,17 +51,19 @@ const Chat: React.FC<IProps> = ({ location }) => {
 
 	const sendMessage = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		e.preventDefault();
-
+		console.log('here');
 		if (message) {
 			socket.emit('sendMessage', message, () => setMessage(''));
 		}
 	};
 
+	console.log(message, messages);
+
 	return (
 		<div className="outerContainer">
 			<div className="container">
 				<InfoBar room={room} />
-				<Input message={message} setMessage={setMessage} sendMessage={setMessage} />
+				<Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
 			</div>
 		</div>
 	);

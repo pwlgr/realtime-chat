@@ -1,10 +1,10 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Join.css';
 
 const Join: React.FC = () => {
-	const [ room, setRoom ] = React.useState<string>('');
-	const [ name, setName ] = React.useState<string>('');
+	const [ room, setRoom ] = useState<string>('');
+	const [ name, setName ] = useState<string>('');
 	return (
 		<div className="joinOuterContainer">
 			<div className="joinInnerContainer">

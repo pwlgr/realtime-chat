@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import io from 'socket.io-client';
 import './Chat.css';
 import InfoBar from '../InfoBar/InfoBar';
+import Input from '../Input/Input';
 
 let socket;
 
@@ -60,11 +61,7 @@ const Chat: React.FC<IProps> = ({ location }) => {
 		<div className="outerContainer">
 			<div className="container">
 				<InfoBar room={room} />
-				<input
-					value={message}
-					onChange={(e: React.FormEvent<HTMLInputElement>) => setMessage(e.target.value)}
-					onKeyPress={(e: React.FormEvent<HTMLInputElement>) => (e.key === 'Enter' ? sendMessage(e) : null)}
-				/>
+				<Input message={message} setMessage={setMessage} sendMessage={setMessage} />
 			</div>
 		</div>
 	);

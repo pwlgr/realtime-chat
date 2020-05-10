@@ -11,6 +11,7 @@ const Input: React.F<IProps> = ({ message, setMessage, sendMessage }) => {
 	return (
 		<form className="form">
 			<input
+				aria-label="messageInput"
 				className="input"
 				type="text"
 				placeholder="Type a message..."

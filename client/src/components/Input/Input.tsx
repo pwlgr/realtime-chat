@@ -7,7 +7,7 @@ interface IProps {
 	sendMessage: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.F<IProps> = ({ message, setMessage, sendMessage }) => {
+const Input: React.FC<IProps> = ({ message, setMessage, sendMessage }) => {
 	return (
 		<form className="form">
 			<input

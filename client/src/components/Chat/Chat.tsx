@@ -5,8 +5,15 @@ import './Chat.css';
 import InfoBar from '../InfoBar/InfoBar';
 import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
+import ActiveUsers from '../ActiveUsers/ActiveUsers';
 
 let socket;
+
+interface User {
+	id: string;
+	room: string;
+	name: string;
+}
 
 interface IProps {
 	hash: string;
@@ -23,6 +30,7 @@ const Chat: React.FC<IProps> = ({ location }) => {
 	const [ room, setRoom ] = useState<string>('');
 	const [ messages, setMessages ] = useState<string[]>([]);
 	const [ message, setMessage ] = useState<string>('');
+	const [ users, setUsers ] = useState<User[]>([]);
 
 	useEffect(
 		() => {
@@ -43,22 +51,22 @@ const Chat: React.FC<IProps> = ({ location }) => {
 
 	useEffect(
 		() => {
+			socket.on('roomData', ({ users }) => {
+				setUsers(users);
+			});
 			socket.on('message', (message: string) => {
 				setMessages([ ...messages, message ]);
 			});
 		},
-		[ messages ]
+		[ messages, users ]
 	);
 
 	const sendMessage = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		e.preventDefault();
-		console.log('here');
 		if (message) {
 			socket.emit('sendMessage', message, () => setMessage(''));
 		}
 	};
-
-	console.log(message, messages);
 
 	return (
 		<div className="outerContainer">
@@ -66,6 +74,7 @@ const Chat: React.FC<IProps> = ({ location }) => {
 				<InfoBar room={room} />
 				<Messages messages={messages} name={name} />
 				<Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+				<ActiveUsers users={users} />
 			</div>
 		</div>
 	);

@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import './Join.css';
 
-const Join: React.FC = () => {
+const Join: React.FC = (props) => {
 	const [ room, setRoom ] = useState<string>('');
 	const [ name, setName ] = useState<string>('');
+
+	const goToRoom = (e) => {
+		if (!name && !room) return null;
+		e.preventDefault();
+		props.history.push(`/chat?name=${name}&room=${room}`);
+	};
+
 	return (
 		<div className="joinOuterContainer">
 			<div className="joinInnerContainer">
 				<h1 className="heading">Join</h1>
 				<div>
 					<input
+						aria-label="nameInput"
 						placeholder="Name"
 						className="joinInput"
 						type="text"
@@ -22,17 +29,12 @@ const Join: React.FC = () => {
 						placeholder="Room"
 						className="joinInput mt-20"
 						type="text"
-						onChange={(e: React.FormEvent<HTMLInputElement>) => setRoom(e.target.value)}
+						onChange={(e) => setRoom(e.target.value)}
 					/>
 				</div>
-				<Link
-					onClick={(e: React.FormEvent<HTMLInputElement>) => (!name || !room ? e.preventDefault() : null)}
-					to={`/chat?name=${name}&room=${room}`}
-				>
-					<button className={'button mt-20'} type="submit">
-						Sign In
-					</button>
-				</Link>
+				<button className={'button mt-20'} type="submit" onClick={(e) => goToRoom(e)}>
+					Sign In
+				</button>
 			</div>
 		</div>
 	);
